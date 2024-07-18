@@ -83,10 +83,17 @@ include "../config/koneksi.php";
         <?php
         $NoOrder = mysqli_real_escape_string($conn, $_GET['co']);
         $customer_result = mysqli_query($conn, "SELECT * FROM tbl_penjualan WHERE NoOrder = '$NoOrder' LIMIT 1");
-        $customer_data = mysqli_fetch_assoc($customer_result);
+        if ($customer_result && mysqli_num_rows($customer_result) > 0) {
+            $customer_data = mysqli_fetch_assoc($customer_result);
+        } else {
+            $customer_data = ['Pelayanan' => '', 'Pelanggan' => ''];
+        }
         ?>
+         <div style="width: 100px; display: inline-block; margin-bottom: 5px;">Pelayanan</div>
+        <div style="display: inline-block;">: <?php echo htmlspecialchars($customer_data['Pelayanan']); ?></div>
+        <br>
         <div style="width: 100px; display: inline-block; margin-bottom: 5px;">Pelanggan</div>
-        <div style="display: inline-block;">: <?php echo htmlspecialchars($customer_data['Pelanggan']); ?></div>
+         <div style="display: inline-block;">: <?php echo htmlspecialchars($customer_data['Pelanggan']); ?></div>
         <br>
         <div style="width: 100px; display: inline-block; margin-bottom: 5px;">Tanggal</div>
         <div style="display: inline-block;">: <?php echo date('Y-m-d'); ?></div>
@@ -127,26 +134,38 @@ include "../config/koneksi.php";
         $grand_total = $totals['total'] ?? 0;
         $bayar_amount = $totals['bayar'] ?? 0;
         $kembalian_amount = $totals['kembalian'] ?? 0;
+        $ppn = 0.08 * $grand_total;
+        $total_plus_ppn = $grand_total + $ppn;
         ?>
 
 <div class="total">
-    <table>
-        <tr>
-            <td style="width: 100px;">Total</td>
-            <td style="width: 10px;">:</td>
-            <td style="width: 100px;"><?php echo htmlspecialchars($grand_total); ?></td>
-        </tr>
-        <tr>
-            <td style="width: 100px;">Bayar</td>
-            <td style="width: 10px;">:</td>
-            <td style="width: 100px;"><?php echo htmlspecialchars($bayar_amount); ?></td>
-        </tr>
-        <tr>
-            <td style="width: 100px;">Kembali</td>
-            <td style="width: 10px;">:</td>
-            <td style="width: 100px;"><?php echo htmlspecialchars($kembalian_amount); ?></td>
-        </tr>
-    </table>
+<table>
+                <tr>
+                    <td style="width: 100px;">Total</td>
+                    <td style="width: 10px;">:</td>
+                    <td style="width: 100px;"><?php echo htmlspecialchars($grand_total); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;">PPN (8%)</td>
+                    <td style="width: 10px;">:</td>
+                    <td style="width: 100px;"><?php echo htmlspecialchars($ppn); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;">Total + PPN</td>
+                    <td style="width: 10px;">:</td>
+                    <td style="width: 100px;"><?php echo htmlspecialchars($total_plus_ppn); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;">Bayar</td>
+                    <td style="width: 10px;">:</td>
+                    <td style="width: 100px;"><?php echo htmlspecialchars($bayar_amount); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;">Kembali</td>
+                    <td style="width: 10px;">:</td>
+                    <td style="width: 100px;"><?php echo htmlspecialchars($kembalian_amount); ?></td>
+                </tr>
+            </table>
 </div>
 <br>  
         <div class="footer">Terima kasih atas pembelian Anda</div>

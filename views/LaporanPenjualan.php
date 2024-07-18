@@ -132,6 +132,7 @@ $conn->close();
                 <tr>
                     <th>No</th>
                     <th>NoOrder</th>
+                    <th>Pelayanan</th>
                     <th>Pelanggan</th>
                     <th>Makanan</th>
                     <th>Harga</th>
@@ -147,6 +148,7 @@ $conn->close();
                     <tr>
                         <td><?php echo $row['No']; ?></td>
                         <td><?php echo $row['NoOrder']; ?></td>
+                        <td><?php echo $row['Pelayanan']; ?></td>
                         <td><?php echo $row['Pelanggan']; ?></td>
                         <td><?php echo $row['Makanan']; ?></td>
                         <td><?php echo $row['harga']; ?></td>
